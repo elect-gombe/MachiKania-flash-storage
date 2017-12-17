@@ -1,0 +1,40 @@
+#include <stdio.h>
+#include <dirent.h>
+#include <string.h>
+
+void make(char *path);
+
+int main(int argc,char **argv){
+  char path[1024];
+  
+  if(argc != 2){
+    fprintf(stderr,"param:path of source\n");
+  }
+
+  strcpy(path,argv[1]);
+  make(path);
+  
+  return 0;
+}
+
+void make(char *path){
+  DIR *dir;
+  struct dirent *dp;
+  int len;
+  dir = opendir(path);
+  for(dp=readdir(dir);dp!=NULL;dp=readdir(dir)){
+    if(dp->d_type == DT_DIR){
+      if(dp->d_name[0] == '.')continue;
+      char *bp = path;
+      len = 0:
+      while(*++bp)len++;
+      sprintf(bp, "/%s",dp->d_name);
+      fprintf(stderr,"search into [%s]\n",path);
+      make(path);
+      path[len]=0;
+    }else{
+      printf("%s/%s\n",path,dp->d_name);
+    }
+  }
+  closedir(dir);  
+}
